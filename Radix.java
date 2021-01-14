@@ -13,25 +13,21 @@ public class Radix {
         }
     }
 
-    public static void radixSimpleSort(SortableLinkedList data) {
+    public static void radixSortSimple(SortableLinkedList data) {
         SortableLinkedList[] buckets = new SortableLinkedList[10];
-        int maxCol = 0;
+        int maxCol = 1;
 
         for(int i = 0; i < buckets.length; i++) {
             buckets[i] = new SortableLinkedList();
         }
 
-        for(int i = 0; i < data.size(); i++) {
-            if(length(data.get(i)) > maxCol) {
-                maxCol = data.get(i);
-            }
-        }
-
         for(int i = 0; i < maxCol; i++) {
             while(data.size() > 0) {
                 int n = data.get(0);
-                int digit = nth(n, i);
-                buckets[digit].add(n);
+                if(i == 0 && length(n) > maxCol) {
+                    maxCol = length(n);
+                }
+                buckets[nth(n,i)].add(n);
                 data.remove(0);
             }
             merge(data, buckets);
@@ -43,16 +39,17 @@ public class Radix {
         SortableLinkedList positives = new SortableLinkedList(); // + 0
 
         while(data.size() > 0) {
-            if(data.get(0) >= 0) {
-                positives.add(data.get(0));
+            int n =data.get(0);
+            if(n >= 0) {
+                positives.add(n);
             } else {
-                negatives.add(-data.get(0));
+                negatives.add(-n);
             }
             data.remove(0);
         }
 
-        radixSimpleSort(negatives);
-        radixSimpleSort(positives);
+        radixSortSimple(negatives);
+        radixSortSimple(positives);
 
         negatives = fixNegatives(negatives);
         negatives.extend(positives);
@@ -63,7 +60,7 @@ public class Radix {
     private static SortableLinkedList fixNegatives(SortableLinkedList list) {
         SortableLinkedList hold = new SortableLinkedList();
         for(int i = list.size() - 1; i >=0; i--) {
-            System.out.println(i + ", " + list.get(i));
+            // System.out.println(i + ", " + list.get(i));
             hold.add(list.get(i)*-1);
         }
         return hold;
