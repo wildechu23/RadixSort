@@ -1,13 +1,14 @@
 public class Radix {
     public static int nth(int n, int col) {
-        // return (int)(n / Math.pow(10,col)) % 10;
-        if(n < 0) n = -n;
-        int divNum = 1;
-        for(int i = 0; i < col; i++) {
-            divNum *= 10;
+        return (int)(n / powten(col)) % 10;
+    }
+
+    private static int powten(int b) {
+        int a = 1;
+        for(int i = 0; i < b; i++) {
+            a *= 10;
         }
-        n = (n / divNum) % 10;
-        return n;
+        return a;
     }
 
     public static int length(int n) {
@@ -31,12 +32,13 @@ public class Radix {
         for(int i = 0; i < maxCol; i++) {
             while(data.size() > 0) {
                 int n = data.get(0);
-                if(i == 0 && length(n) > maxCol) {
-                    maxCol = length(n);
+                if(i == 0 && n > maxCol) {
+                    maxCol = n;
                 }
                 buckets[nth(n,i)].add(n);
                 data.remove(0);
             }
+            if(i == 0) maxCol = length(maxCol);
             merge(data, buckets);
         }
     }
