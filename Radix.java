@@ -25,7 +25,7 @@ public class Radix {
         SortableLinkedList[] buckets = new SortableLinkedList[10];
         int maxCol = 1;
 
-        for(int i = 0; i < buckets.length; i++) {
+        for(int i = 0; i < 10; i++) {
             buckets[i] = new SortableLinkedList();
         }
 
